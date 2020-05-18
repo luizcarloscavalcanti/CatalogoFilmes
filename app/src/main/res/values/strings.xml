@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Catálogo de Filmes</string>
+    <string name="conn_error">Problema de Conexão</string>
+
+    <!-- Network State -->
+    <string name="msg_succes">Sucesso</string>
+    <string name="msg_running">Executando</string>
+    <string name="msg_failed">Algo está errado</string>
+    <string name="msg_end_list">Você chegou ao fim!</string>
+</resources>
