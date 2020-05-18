@@ -1,31 +1,31 @@
-package com.luizcarloscavalcanti.catalogodefilmes.data.repository.data_source.genres
+package com.luizcarloscavalcanti.catalogodefilmes.data.repository.data_source
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import com.luizcarloscavalcanti.catalogodefilmes.data.api.FIRST_PAGE
 import com.luizcarloscavalcanti.catalogodefilmes.data.api.MovieInterface
-import com.luizcarloscavalcanti.catalogodefilmes.data.api.GENRE_ANIMATION
-import com.luizcarloscavalcanti.catalogodefilmes.data.objects.Movie
+import com.luizcarloscavalcanti.catalogodefilmes.data.objects.MovieDetails
 import com.luizcarloscavalcanti.catalogodefilmes.data.repository.StatusInternet
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class AnimationDataSource(
+class MovieDataSource(
     private val apiService: MovieInterface,
     private val compositeDisposable: CompositeDisposable
-) : PageKeyedDataSource<Int, Movie>() {
+) : PageKeyedDataSource<Int, MovieDetails>() {
 
-    private var animation = GENRE_ANIMATION
+    private var page = FIRST_PAGE
 
     val statusInternet: MutableLiveData<StatusInternet> = MutableLiveData()
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
-        callback: LoadInitialCallback<Int, Movie>
+        callback: LoadInitialCallback<Int, MovieDetails>
     ) {
         statusInternet.postValue(StatusInternet.LOADING)
         compositeDisposable.add(
-            apiService.getGenreFilme(animation)
+            apiService.getPopularFilme(page)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
@@ -34,16 +34,16 @@ class AnimationDataSource(
                     },
                     {
                         statusInternet.postValue(StatusInternet.ERROR)
-                        Log.e("AnimationDataSource", it.message)
+                        Log.e("FilmeDataSource", it.message)
                     }
                 )
         )
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, MovieDetails>) {
         statusInternet.postValue(StatusInternet.LOADING)
         compositeDisposable.add(
-            apiService.getGenreFilme(params.key)
+            apiService.getPopularFilme(params.key)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     {
@@ -56,13 +56,13 @@ class AnimationDataSource(
                     },
                     {
                         statusInternet.postValue(StatusInternet.ERROR)
-                        Log.e("AnimationDataSource", it.message)
+                        Log.e("FilmeDataSource", it.message)
                     }
                 )
         )
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, MovieDetails>) {
 
     }
 

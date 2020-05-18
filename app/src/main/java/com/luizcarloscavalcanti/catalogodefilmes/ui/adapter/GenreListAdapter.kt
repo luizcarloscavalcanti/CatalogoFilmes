@@ -17,8 +17,8 @@ import com.luizcarloscavalcanti.catalogodefilmes.ui.MovieActivity
 import kotlinx.android.synthetic.main.network_status_item.view.*
 import kotlinx.android.synthetic.main.popular_movie_list_item.view.*
 
-class AdventureAdapter(public val context: Context) :
-    PagedListAdapter<Movie, RecyclerView.ViewHolder>(FilmeDiffCallback()) {
+class GenreAdapter(val context: Context) :
+    PagedListAdapter<Movie, RecyclerView.ViewHolder>(MovieDiffCallback()) {
 
     val FILME_VIEW_TYPE = 1
     private val NETWORK_VIEW_TYPE = 2
@@ -31,16 +31,16 @@ class AdventureAdapter(public val context: Context) :
 
         if (viewType == FILME_VIEW_TYPE) {
             view = layoutInflater.inflate(R.layout.popular_movie_list_item, parent, false)
-            return FilmeDiffCallback.FilmeItemViewHolder(view)
+            return MovieDiffCallback.MovieItemViewHolder(view)
         } else {
             view = layoutInflater.inflate(R.layout.network_status_item, parent, false)
-            return FilmeDiffCallback.FilmeItemViewHolder(view)
+            return MovieDiffCallback.MovieItemViewHolder(view)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == FILME_VIEW_TYPE) {
-            (holder as FilmeDiffCallback.FilmeItemViewHolder).bind(getItem(position), context)
+            (holder as MovieDiffCallback.MovieItemViewHolder).bind(getItem(position), context)
         } else {
             (holder as InternetStatusViewHolder).bind(internetStatus)
         }
@@ -62,7 +62,7 @@ class AdventureAdapter(public val context: Context) :
         }
     }
 
-    class FilmeDiffCallback : DiffUtil.ItemCallback<Movie>() {
+    class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
         }
@@ -71,17 +71,17 @@ class AdventureAdapter(public val context: Context) :
             return oldItem == newItem
         }
 
-        class FilmeItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        class MovieItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-            fun bind(filme: Movie?, context: Context) {
-                val filmePosterURL = IMAGE_URL + filme?.posterPath
+            fun bind(movie: Movie?, context: Context) {
+                val filmePosterURL = IMAGE_URL + movie?.posterPath
                 Glide.with(itemView.context)
                     .load(filmePosterURL)
                     .into(itemView.iv_movie_poster_cv)
 
                 itemView.setOnClickListener {
                     val intent = Intent(context, MovieActivity::class.java)
-                    intent.putExtra("id", filme?.id)
+                    intent.putExtra("id", movie?.id)
                     context.startActivity(intent)
                 }
             }

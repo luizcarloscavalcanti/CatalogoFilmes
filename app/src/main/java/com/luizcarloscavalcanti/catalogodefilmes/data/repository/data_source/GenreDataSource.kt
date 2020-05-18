@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.luizcarloscavalcanti.catalogodefilmes.data.api.MovieInterface
 import com.luizcarloscavalcanti.catalogodefilmes.data.api.GENRE_ACTION
-import com.luizcarloscavalcanti.catalogodefilmes.data.objects.Movie
+import com.luizcarloscavalcanti.catalogodefilmes.data.objects.MovieDetails
 import com.luizcarloscavalcanti.catalogodefilmes.data.repository.StatusInternet
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 class ActionDataSource(
     private val apiService: MovieInterface,
     private val compositeDisposable: CompositeDisposable
-) : PageKeyedDataSource<Int, Movie>() {
+) : PageKeyedDataSource<Int, MovieDetails>() {
 
     private var action = GENRE_ACTION
 
@@ -21,7 +21,7 @@ class ActionDataSource(
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
-        callback: LoadInitialCallback<Int, Movie>
+        callback: LoadInitialCallback<Int, MovieDetails>
     ) {
         statusInternet.postValue(StatusInternet.LOADING)
         compositeDisposable.add(
@@ -40,7 +40,7 @@ class ActionDataSource(
         )
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, MovieDetails>) {
         statusInternet.postValue(StatusInternet.LOADING)
         compositeDisposable.add(
             apiService.getGenreFilme(params.key)
@@ -62,7 +62,7 @@ class ActionDataSource(
         )
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, MovieDetails>) {
 
     }
 
