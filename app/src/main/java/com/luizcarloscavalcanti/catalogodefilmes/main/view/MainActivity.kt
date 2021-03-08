@@ -1,4 +1,4 @@
-package com.luizcarloscavalcanti.catalogodefilmes
+package com.luizcarloscavalcanti.catalogodefilmes.main.view
 
 import androidx.appcompat.app.AppCompatActivity
 
